@@ -70,6 +70,9 @@ export function ViewLogEntries() {
   );
 
   function content() {
+    // TODO(jaketrower): If this was production, I would love to make a partial loading state
+    // such that deleting, creating, or editing new entries didn't result in what LOOKED like a full page refresh.
+    // And that the in progress deleted/edited/created log entry would be grayed out and disabled while loading.
     if (isLoading) {
       return <Loading />;
     }
