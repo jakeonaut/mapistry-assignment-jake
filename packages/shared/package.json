@@ -1,0 +1,20 @@
+{
+  "name": "@mapistry/take-home-challenge-shared",
+  "version": "1.0.0",
+  "description": "The Mapistry take home challenge project - Shared",
+  "repository": "https://github.com/Mapistry/take-home-challenge",
+  "author": "Mapistry <info@mapistry.com>",
+  "license": "UNLICENSED",
+  "private": true,
+  "packageManager": "yarn@3.1.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc --listEmittedFiles",
+    "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && echo \"No linting problems found.\"",
+    "test": "jest",
+    "typecheck": "tsc --noEmit && echo \"No type problems found.\""
+  },
+  "devDependencies": {
+    "typescript": "^4.5.2"
+  }
+}
