@@ -6,6 +6,7 @@ import { deleteLogEntry } from '../../shared/apiClient/logsApi';
 
 interface ViewLogEntriesTableProps {
   logId: string;
+  onClickEditLog: (logEntry: LogEntryResponse) => Promise<void>;
 }
 
 const StyledTable = styled.table`
@@ -24,15 +25,25 @@ const StyledTable = styled.table`
   }
 `;
 
-export function ViewLogEntriesTable({ logId }: ViewLogEntriesTableProps) {
+export function ViewLogEntriesTable({
+  logId,
+  onClickEditLog,
+}: ViewLogEntriesTableProps) {
   const { logEntries, refreshLogEntries } = useLogEntries({ logId });
   const handleDelete = useCallback(
-    async (logEntry) => {
+    async (logEntry: LogEntryResponse) => {
       // eslint-disable-next-line no-restricted-globals, no-alert
-      if (confirm('Are you sure?')) {
+      if (confirm('Are you sure? :))))))')) {
         await deleteLogEntry(logEntry);
         refreshLogEntries();
       }
+    },
+    [refreshLogEntries],
+  );
+
+  const handleEdit = useCallback(
+    async (logEntry: LogEntryResponse) => {
+      onClickEditLog(logEntry);
     },
     [refreshLogEntries],
   );
@@ -52,7 +63,11 @@ export function ViewLogEntriesTable({ logId }: ViewLogEntriesTableProps) {
   function actions(logEntry: LogEntryResponse) {
     return (
       <div>
-        <button type="button" style={{ marginRight: '0.5rem' }}>
+        <button
+          type="button"
+          onClick={() => handleEdit(logEntry)}
+          style={{ marginRight: '0.5rem' }}
+        >
           Edit
         </button>
         <button type="button" onClick={() => handleDelete(logEntry)}>

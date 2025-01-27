@@ -12,6 +12,12 @@ export type CreateLogEntryRequest = {
   logValue: number;
 };
 
+export type EditLogEntryRequest = {
+  logEntryId: string;
+  logDate: DateLike;
+  logValue: number;
+};
+
 export enum HttpStatusCode {
   OK = 200,
   CREATED = 201,
