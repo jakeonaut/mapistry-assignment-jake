@@ -103,6 +103,7 @@ export function EditLogEntryModal({
               logValue: { value: string };
             };
             const editRequest: EditLogEntryRequest = {
+              type: 'edit',
               logEntryId: logEntry.id,
               logDate: new Date(target.logDate.value),
               logValue: parseInt(target.logValue.value, 10),

@@ -14,7 +14,13 @@ export class LogEntriesRepository {
 
   async modifyLogEntry(logEntry: LogEntry): Promise<LogEntry> {
     const dto = LogEntriesPersistenceMapper.toPersistence(logEntry);
-    const result = await Database.modifyLogEntry(logEntry);
+    const result = await Database.modifyLogEntry(dto);
+    if (!result) {
+      throw new RecordNotFoundError(
+        `log entry not found for id: ${logEntry.id}`,
+      );
+    }
+    return logEntry;
   }
 
   async findById(logEntryId: string): Promise<LogEntry> {

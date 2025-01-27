@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 interface CreateLogEntryProps {
   handleClose: () => void;
-  handleCreate: (logEntry: CreateLogEntryRequest) => void;
+  handleCreate: (req: CreateLogEntryRequest) => void;
 }
 
 const Modal = styled.div`
@@ -88,11 +88,12 @@ export function CreateLogEntryModal({
               logDate: { value: string };
               logValue: { value: string };
             };
-            const logEntry = {
+            const req: CreateLogEntryRequest = {
+              type: 'create', // I figure it's fair game to add if we were relying on the request type
               logDate: new Date(target.logDate.value),
               logValue: parseInt(target.logValue.value, 10),
             };
-            handleCreate(logEntry);
+            handleCreate(req);
           }}
         >
           <label htmlFor="logDate">

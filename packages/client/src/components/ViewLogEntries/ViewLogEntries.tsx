@@ -1,4 +1,5 @@
 import {
+  CreateLogEntryRequest,
   EditLogEntryRequest,
   LogEntryResponse,
 } from '@mapistry/take-home-challenge-shared';

@@ -64,10 +64,15 @@ export class Database {
   public static async modifyLogEntry(editedEntry: LogEntriesRecord) {
     await this.simulateDbSlowness();
     const db = await fs.readFileSync(FILE_NAME, 'utf8');
-    const allEntries = JSON.parse(db);
-    allEntries.map((le) => (le.id === editedEntry.id ? editedEntry : le));
-    // Should upstream notify for failures to find the existing entry.
-    await fs.writeFileSync(FILE_NAME, JSON.stringify(allEntries));
+    const allEntries = JSON.parse(db) as LogEntriesRecord[];
+    // This will cause two simulatedDbSlowness. Ideally we would fetch & modify in basically one go.
+    if (this.findById(editedEntry.id) === null) {
+      return null;
+    }
+    const modifiedEntries = allEntries.map((le) =>
+      le.id === editedEntry.id ? editedEntry : le,
+    );
+    await fs.writeFileSync(FILE_NAME, JSON.stringify(modifiedEntries));
     return editedEntry;
   }
 

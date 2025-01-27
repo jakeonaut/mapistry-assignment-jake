@@ -31,8 +31,8 @@ export class LogEntriesService {
     const mapper = new LogEntriesApiMapper();
     const logEntry = mapper.fromRequest(logId, editLogEntry);
     const repository = new LogEntriesRepository(logId);
-    const editedEntry = await repository.editLogEntry(logEntry);
-    return mapper.toResponse(editedEntry);
+    const modifiedEntry = await repository.modifyLogEntry(logEntry);
+    return mapper.toResponse(modifiedEntry);
   }
 
   async deleteLogEntry(logId: string, logEntryId: string): Promise<string> {

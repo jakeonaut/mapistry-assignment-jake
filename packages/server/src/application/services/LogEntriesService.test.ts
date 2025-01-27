@@ -2,6 +2,7 @@
 import {
   LOG_2_ID,
   LogEntryResponse,
+  CreateLogEntryRequest,
 } from '@mapistry/take-home-challenge-shared';
 import { Database, LogEntriesRecord } from '../../shared/database';
 import { LogEntriesService } from './LogEntriesService';
@@ -26,9 +27,10 @@ describe('LogEntriesService', () => {
   });
 
   describe('createLogEntry', () => {
-    const newEntry = {
+    const newEntry: CreateLogEntryRequest = {
       logDate: '2024-01-01',
       logValue: 23,
+      type: 'create',
     };
     let result: LogEntryResponse;
 

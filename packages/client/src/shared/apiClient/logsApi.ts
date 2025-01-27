@@ -39,7 +39,7 @@ export async function createLogEntry({
   logEntry,
 }: CreateLogEntryParams): Promise<CreateLogEntryResponse> {
   const res = await fetch(`/api/logs/${logId}/log-entries`, {
-    body: JSON.stringify({ logEntry }),
+    body: JSON.stringify({ logEntry: { ...logEntry, type: 'create' } }),
     method: 'put',
     headers: {
       'content-type': 'application/json',
@@ -52,13 +52,12 @@ export async function createLogEntry({
   return newlogEntry;
 }
 
-// TODO(jaketrower): this is starting to look more and more like it should all be the same modal/etc
 export async function editLogEntry({
   logId,
   logEntry,
 }: EditLogEntryParams): Promise<EditLogEntryResponse> {
   const res = await fetch(`/api/logs/${logId}/log-entries`, {
-    body: JSON.stringify({ logEntry }),
+    body: JSON.stringify({ logEntry: { ...logEntry, type: 'edit' } }),
     method: 'put',
     headers: {
       'content-type': 'application/json',
