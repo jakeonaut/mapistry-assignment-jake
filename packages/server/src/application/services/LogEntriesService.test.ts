@@ -3,6 +3,7 @@ import {
   LOG_2_ID,
   LogEntryResponse,
   CreateLogEntryRequest,
+  EditLogEntryRequest,
 } from '@mapistry/take-home-challenge-shared';
 import { Database, LogEntriesRecord } from '../../shared/database';
 import { LogEntriesService } from './LogEntriesService';
@@ -48,12 +49,47 @@ describe('LogEntriesService', () => {
       expect(result.logValue).toEqual(newEntry.logValue);
       expect(result.id).toBeDefined();
     });
+
+    // Nesting this in the create so we ensured that we already created an entry.
+    // this could be better but I'm doing it quick
+    describe('editLogEntry', () => {
+      const modifiedEntry: EditLogEntryRequest = {
+        logEntryId: '',
+        logDate: '2025-01-27',
+        logValue: 12,
+        type: 'edit',
+      };
+      let modifiedResult: LogEntryResponse;
+
+      beforeAll(async () => {
+        modifiedResult = await subject.editLogEntry(LOG_2_ID, {
+          ...modifiedEntry,
+          logEntryId: result.id, // sorry.
+        });
+      });
+
+      it('modified the existing log entry', async () => {
+        const allEntries = await subject.getLogEntries(LOG_2_ID);
+        expect(allEntries).toHaveLength(2);
+      });
+
+      it('returns the modified log entry with an id', async () => {
+        expect(modifiedResult.logDate).toEqual(new Date(modifiedEntry.logDate));
+        expect(modifiedResult.logValue).toEqual(modifiedEntry.logValue);
+        expect(modifiedResult.id).toBeDefined();
+      });
+    });
   });
 
   describe('deleteLogEntry', () => {
     let entryToDelete: LogEntriesRecord | undefined;
     let result: string;
 
+    // Oh, are we not mocking the DB? Ideally would change that so we're not writing directly to the "db"
+    // for these tests. Well, good for an integration test (on a non-public db shard or something?)
+    // but bad for unit tests.
+
+    // Oh wait, nevermind, seems we're using a LOG_2_ID that is not the same "Log" that we're using in the test client/server.
     beforeAll(async () => {
       [entryToDelete] = await Database.getAllLogEntries(LOG_2_ID);
       result = await subject.deleteLogEntry(LOG_2_ID, entryToDelete!.id);
