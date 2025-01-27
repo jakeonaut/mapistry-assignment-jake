@@ -61,6 +61,16 @@ export class Database {
     return entry;
   }
 
+  public static async modifyLogEntry(editedEntry: LogEntriesRecord) {
+    await this.simulateDbSlowness();
+    const db = await fs.readFileSync(FILE_NAME, 'utf8');
+    const allEntries = JSON.parse(db);
+    allEntries.map((le) => (le.id === editedEntry.id ? editedEntry : le));
+    // Should upstream notify for failures to find the existing entry.
+    await fs.writeFileSync(FILE_NAME, JSON.stringify(allEntries));
+    return editedEntry;
+  }
+
   public static async findById(
     logEntryId: string,
   ): Promise<LogEntriesRecord | null> {

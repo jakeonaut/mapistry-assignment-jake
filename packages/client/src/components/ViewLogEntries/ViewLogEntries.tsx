@@ -6,7 +6,7 @@ import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useLastVisitedLog } from '../../hooks/useLastVisitedLog';
 import { useLogEntries } from '../../hooks/useLogEntries';
-import { createLogEntry } from '../../shared/apiClient/logsApi';
+import { createLogEntry, editLogEntry } from '../../shared/apiClient/logsApi';
 import { Error } from '../shared/Error';
 import { Loading } from '../shared/Loading';
 import { CreateLogEntryModal } from './CreateLogEntryModal';
@@ -61,8 +61,7 @@ export function ViewLogEntries() {
 
   const handleEditLogEntry = useCallback(
     async (logEntry: EditLogEntryRequest) => {
-      // await createLogEntry({ logId: lastVisitedLog.id, logEntry });
-      alert(JSON.stringify(logEntry));
+      await editLogEntry({ logId: lastVisitedLog.id, logEntry });
       setCurrentEditLogEntry(undefined);
       refreshLogEntries();
     },

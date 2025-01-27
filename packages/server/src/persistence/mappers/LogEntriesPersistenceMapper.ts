@@ -1,6 +1,7 @@
 import { LogEntry } from '../../domain/entities/LogEntry';
 import { LogEntriesRecord } from '../../shared/database';
 
+// TODO(jaketrower): what the heck
 export class LogEntriesPersistenceMapper {
   static toPersistence(logEntry: LogEntry): LogEntriesRecord {
     return {

@@ -1,3 +1,5 @@
+// copied from CreateLogEntryModal, I forgot how to keep git history
+
 import {
   EditLogEntryRequest,
   LogEntryResponse,
