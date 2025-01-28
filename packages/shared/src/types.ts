@@ -8,6 +8,14 @@ export type LogEntryResponse = {
 };
 
 export type CreateLogEntryRequest = {
+  type: 'create';
+  logDate: DateLike;
+  logValue: number;
+};
+
+export type EditLogEntryRequest = {
+  type: 'edit';
+  logEntryId: string;
   logDate: DateLike;
   logValue: number;
 };

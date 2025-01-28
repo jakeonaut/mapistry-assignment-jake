@@ -1,10 +1,19 @@
-import { CreateLogEntryRequest } from '@mapistry/take-home-challenge-shared';
+// copied from CreateLogEntryModal, I forgot how to keep git history
+
+import {
+  EditLogEntryRequest,
+  LogEntryResponse,
+  DateLike,
+} from '@mapistry/take-home-challenge-shared';
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-interface CreateLogEntryProps {
+// TODO(jaketrower): This could probably be broken up to use the same rendering component as CreateLogEntryModal, and just split the business logic
+
+interface EditLogEntryProps {
+  logEntry: LogEntryResponse;
   handleClose: () => void;
-  handleCreate: (req: CreateLogEntryRequest) => void;
+  handleEdit: (logEntry: EditLogEntryRequest) => void;
 }
 
 const Modal = styled.div`
@@ -70,17 +79,22 @@ const ButtonContainer = styled.div`
   }
 `;
 
-export function CreateLogEntryModal({
+function getDateStrValue(date: DateLike): string {
+  return new Date(date).toISOString().substring(0, 10);
+}
+
+export function EditLogEntryModal({
+  logEntry,
   handleClose,
-  handleCreate,
-}: CreateLogEntryProps) {
+  handleEdit,
+}: EditLogEntryProps) {
   return (
     <Modal>
       <ModalContent>
         <CloseButton type="button" onClick={handleClose}>
           X
         </CloseButton>
-        <Header>Create Log Entry</Header>
+        <Header>Edit Log Entry</Header>
         <StyledForm
           onSubmit={(event: React.SyntheticEvent) => {
             event.preventDefault();
@@ -88,28 +102,37 @@ export function CreateLogEntryModal({
               logDate: { value: string };
               logValue: { value: string };
             };
-            const req: CreateLogEntryRequest = {
-              type: 'create', // I figure it's fair game to add if we were relying on the request type
+            const editRequest: EditLogEntryRequest = {
+              type: 'edit',
+              logEntryId: logEntry.id,
               logDate: new Date(target.logDate.value),
               logValue: parseInt(target.logValue.value, 10),
             };
-            handleCreate(req);
+            handleEdit(editRequest);
           }}
         >
           <label htmlFor="logDate">
             Date:&nbsp;
-            <input type="date" name="logDate" />
+            <input
+              type="date"
+              name="logDate"
+              defaultValue={getDateStrValue(logEntry.logDate)}
+            />
           </label>
 
           <label htmlFor="logValue">
             Value:&nbsp;
-            <input type="text" name="logValue" />
+            <input
+              type="text"
+              name="logValue"
+              defaultValue={logEntry.logValue}
+            />
           </label>
           <ButtonContainer>
             <button type="button" onClick={handleClose}>
               Cancel
             </button>
-            <button type="submit">Save</button>
+            <button type="submit">Edit</button>
           </ButtonContainer>
         </StyledForm>
       </ModalContent>

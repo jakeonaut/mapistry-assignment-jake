@@ -1,4 +1,9 @@
-import { HttpStatusCode } from '@mapistry/take-home-challenge-shared';
+import {
+  HttpStatusCode,
+  CreateLogEntryRequest,
+  EditLogEntryRequest,
+  LogEntryResponse,
+} from '@mapistry/take-home-challenge-shared';
 import { Router } from 'express';
 import { LogEntriesService } from '../../application/services/LogEntriesService';
 import { RecordNotFoundError, ValidationError } from '../../shared/errors';
@@ -17,8 +22,15 @@ logEntriesController.put('/logs/:logId/log-entries', async (req, res) => {
   const { logEntry } = req.body;
   const logEntryService = new LogEntriesService();
   try {
-    const logEntries = await logEntryService.createLogEntry(logId, logEntry);
-    res.json(logEntries);
+    // Could be better to split into multiple methods here in the controller, but I think it should all be in one "put" ?
+    if (logEntry.type === 'create') {
+      // Should this name be singular?
+      const logEntries = await logEntryService.createLogEntry(logId, logEntry);
+      res.json(logEntries);
+    } else if (logEntry.type === 'edit') {
+      const logEntries = await logEntryService.editLogEntry(logId, logEntry);
+      res.json(logEntries);
+    }
   } catch (e: unknown) {
     if (e instanceof ValidationError) {
       res.status(HttpStatusCode.INVALID_DATA);

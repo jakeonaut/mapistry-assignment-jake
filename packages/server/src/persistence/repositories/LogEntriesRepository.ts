@@ -12,6 +12,17 @@ export class LogEntriesRepository {
     return logEntry;
   }
 
+  async modifyLogEntry(logEntry: LogEntry): Promise<LogEntry> {
+    const dto = LogEntriesPersistenceMapper.toPersistence(logEntry);
+    const result = await Database.modifyLogEntry(dto);
+    if (!result) {
+      throw new RecordNotFoundError(
+        `log entry not found for id: ${logEntry.id}`,
+      );
+    }
+    return logEntry;
+  }
+
   async findById(logEntryId: string): Promise<LogEntry> {
     const record = await Database.findById(logEntryId);
     if (!record) {
@@ -19,6 +30,7 @@ export class LogEntriesRepository {
         `log entry not found for id: ${logEntryId}`,
       );
     }
+    // TODO(jaketrower): interesting...
     return LogEntriesPersistenceMapper.fromPersistence(record);
   }
 
